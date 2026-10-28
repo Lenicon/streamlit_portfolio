@@ -101,9 +101,9 @@ st.markdown(
         }}
         
         /* Hide top header and reduce top padding */
-        # header[data-testid="stHeader"] {{
-        #     display: none !important;
-        # }}
+        header[data-testid="stHeader"] {{
+            display: none !important;
+        }}
         .block-container {{
             padding-top: 2rem !important;
             padding-bottom: 2rem !important;
