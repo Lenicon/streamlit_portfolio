@@ -82,13 +82,12 @@ selected_page = st.radio(
     key="nav_radio"
 )
 
-
 if selected_page != st.session_state.page:
     st.session_state.page = selected_page
     st.rerun()
 
 # ==========================================
-# CSS DESIGN
+# CSS DESIGN & MOBILE RESPONSIVENESS
 # ==========================================
 st.markdown(
     f"""
@@ -110,18 +109,25 @@ st.markdown(
             max-width: 1200px !important;
         }}
 
-        /* --- MODERNIZED NAVIGATION TABS --- */
+        /* --- MODERNIZED NAVIGATION TABS (MOBILE-FRIENDLY SCROLL) --- */
         div[role="radiogroup"] {{
             display: flex !important;
             flex-direction: row !important;
-            gap: 1rem !important;
-            justify-content: center !important;
+            gap: 0.75rem !important;
+            justify-content: flex-start !important;
             background-color: {CARD_BG} !important;
             padding: 0.5rem 1rem !important;
             border-radius: 50px !important;
             border: 1px solid {CARD_BORDER} !important;
             box-shadow: {CARD_SHADOW} !important;
-            margin-bottom: 0rem !important;
+            margin-bottom: 1.5rem !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap !important;
+        }}
+
+        div[role="radiogroup"]::-webkit-scrollbar {{
+            display: none;
         }}
 
         div[role="radiogroup"] input[type="radio"] {{
@@ -139,16 +145,17 @@ st.markdown(
         div[role="radiogroup"] label[data-baseweb="radio"] {{
             background-color: transparent !important;
             border: none !important;
-            padding: 8px 18px !important;
+            padding: 8px 16px !important;
             margin: 0 !important;
             border-radius: 30px !important;
             cursor: pointer !important;
             transition: all 0.25s ease !important;
+            flex-shrink: 0 !important;
         }}
 
         div[role="radiogroup"] label[data-baseweb="radio"] p {{
             color: {TEXT_COLOR} !important;
-            font-size: 1rem !important;
+            font-size: 0.95rem !important;
             font-weight: 500 !important;
             opacity: 0.8;
             margin: 0 !important;
@@ -159,7 +166,7 @@ st.markdown(
         }}
 
         div[role="radiogroup"] label[data-baseweb="radio"]:has(input:checked) p {{
-            color: {"#0E1117" if PRIMARY_COLOR in ["#F5D151", "#2563EB"] else "#FFFFFF"} !important;
+            color: {"#0E1117" if PRIMARY_COLOR in ["#F5D151", "#FBBF24", "#2563EB"] else "#FFFFFF"} !important;
             font-weight: 700 !important;
             opacity: 1 !important;
         }}
@@ -201,6 +208,38 @@ st.markdown(
             background-color: {CARD_BORDER};
             color: {TEXT_COLOR};
             margin: 0.2rem;
+        }}
+
+        /* --- MOBILE MEDIA QUERIES --- */
+        @media (max-width: 768px) {{
+            .block-container {{
+                padding-top: 1rem !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }}
+            
+            h1 {{
+                font-size: 1.75rem !important;
+            }}
+            
+            h3 {{
+                font-size: 1.25rem !important;
+            }}
+            
+            table {{
+                font-size: 0.95rem !important;
+            }}
+            
+            table td {{
+                padding: 6px 8px 6px 0 !important;
+                display: block;
+                width: 100% !important;
+            }}
+            
+            table tr {{
+                margin-bottom: 0.5rem;
+                display: block;
+            }}
         }}
     </style>
     """,
@@ -329,7 +368,6 @@ elif st.session_state.page == "Projects":
     with st.container():
         st.title("Projects")
         
-        # Category Tabs / Subsections
         proj_tab1, proj_tab2, proj_tab3 = st.tabs(["Game Development", "Applications and Websites", "Tools and Utilities"])
         
         with proj_tab2:
@@ -387,8 +425,6 @@ elif st.session_state.page == "Skills":
         st.markdown(f"<h3 style='color: {PRIMARY_COLOR}; margin-top: 0;'>Monthly meters of experience in different tools and engines</h3>", unsafe_allow_html=True)
         st.markdown(f"<hr style='border-color: {CARD_BORDER}; margin: 1.5rem 0;'></hr>", unsafe_allow_html=True)
         
-        
-        # Skill experience dataset (months and target max of 72 months)
         max_mo = 100
         skills_data = [
             {"skill": "Godot & GDScript", "months": 80, "max": max_mo},
@@ -397,9 +433,9 @@ elif st.session_state.page == "Skills":
             {"skill": "TypeScript", "months": 50, "max": max_mo},
             {"skill": "Python", "months": 12, "max": max_mo},
             {"skill": "Flutter & Dart", "months": 12, "max": max_mo},
+            {"skill": "Brawlhalla", "months": 36, "max": max_mo},
         ]
 
-        # Helper function to render a SVG circular progress ring
         def render_circular_bar(title, months, max_months=72):
             percent = min(months / max_months, 1.0)
             radius = 36
@@ -410,9 +446,7 @@ elif st.session_state.page == "Skills":
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; background-color: {BG_COLOR}; border: 1px solid {CARD_BORDER}; border-radius: 16px;">
                 <div style="position: relative; width: 100px; height: 100px;">
                     <svg width="100" height="100" viewBox="0 0 100 100" style="transform: rotate(-90deg);">
-                        <!-- Background Circle Track -->
                         <circle cx="50" cy="50" r="{radius}" stroke="{CARD_BORDER}" stroke-width="8" fill="none" />
-                        <!-- Progress Circle Ring -->
                         <circle cx="50" cy="50" r="{radius}" stroke="{PRIMARY_COLOR}" stroke-width="8" stroke-dasharray="{circumference}" stroke-dashoffset="{dashoffset}" stroke-linecap="round" fill="none" style="transition: stroke-dashoffset 0.5s ease;" />
                     </svg>
                     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -423,7 +457,6 @@ elif st.session_state.page == "Skills":
             </div>
             """
 
-        # Display skills in a clean 3-column grid layout
         cols = st.columns(3)
         for idx, item in enumerate(skills_data):
             with cols[idx % 3]:
@@ -438,7 +471,6 @@ elif st.session_state.page == "Contact":
         st.markdown(f"<h3 style='color: {PRIMARY_COLOR}; margin-top: 0;'>Get in touch or leave feedback!</h3>", unsafe_allow_html=True)
         st.markdown(f"<hr style='border-color: {CARD_BORDER}; margin: 1.5rem 0;'></hr>", unsafe_allow_html=True)
         
-        # Interactive contact form with session state response handling
         if "form_submitted" not in st.session_state:
             st.session_state.form_submitted = False
 
